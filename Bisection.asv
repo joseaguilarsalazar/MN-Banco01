@@ -1,0 +1,17 @@
+string F = input('Ingrese la ecuaacion: ');
+int16 a = input('Primer valor del intervalo: ');
+int16 b = input('Segundo valor del intervalo: ');
+double margen = 0.001;
+int16 c;
+int8 NMAX = 15;
+int8 N = 0;
+
+% Convertir string a función anónima
+f = str2func(['@(x) ', F]);
+while N<=NMAX
+    c = (a + b)/2;
+    if f(c) == 0 || abs(f(c)) < margin
+        
+    end
+    N = N  + 1;
+end
