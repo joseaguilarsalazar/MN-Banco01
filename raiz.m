@@ -1,26 +1,27 @@
-% Script para calcular P(x1 < x < x2) en una normal estándar usando series
+n = input('Ingrese el número del cual desea calcular la raíz cuadrada: ');
+a = input('Primer valor del intervalo: ');
+b = input('Segundo valor del intervalo: ');
+margen = 1e-8;
 
-% Pedir datos al usuario
-x1 = input('Ingresa el valor de x1: ');
-x2 = input('Ingresa el valor de x2: ');
+% Definir la función automáticamente
+f = @(x) x.^2 - n;
 
-% Parámetros de la normal estándar
-mu = 0;z
-sigma = 1;
-N = 20; % Número de términos de la serie para la aproximación
-
-% Definir la constante de la normal
-C = 1 / sqrt(2*pi);
-
-% Cálculo de la integral término a término
-integral = 0;
-for n = 0:N
-    coef = ((-1)^n) / (2^n * factorial(n));
-    integral = integral + coef * ((x2^(2*n+1) - x1^(2*n+1)) / (2*n+1));
+% Verificar que haya cambio de signo
+if f(a) * f(b) > 0
+    error('La función no cambia de signo en el intervalo. No se puede aplicar bisección.');
 end
 
-% Resultado final
-P = C * integral;
-
-% Mostrar el resultado
-fprintf('La probabilidad P(%f < x < %f) es: %f\n', x1, x2, P);
+while true
+    fprintf('[%.8f, %.8f]\n', a, b);
+    c = (a + b) / 2;
+    if f(c) == 0 || abs(f(c)) < margen
+        fprintf('La raíz aproximada es: %.8f\n', c);
+        fprintf('El valor de f(c) es: %.8f\n', f(c));
+        break
+    end
+    if sign(f(c)) == sign(f(a))
+        a = c;
+    else
+        b = c;
+    end
+end

@@ -1,13 +1,23 @@
-% Script para calcular P(x1 < x < x2) en una normal estándar usando series
+% Script mejorado para calcular P(x1 < x < x2) en una normal estándar usando series
 
 % Pedir datos al usuario
 x1 = input('Ingresa el valor de x1: ');
 x2 = input('Ingresa el valor de x2: ');
 
+% Validar que x1 < x2
+if x1 >= x2
+    error('Error: x1 debe ser menor que x2.');
+end
+
+% Advertir sobre valores grandes
+if abs(x1) > 5 || abs(x2) > 5
+    warning('Valores grandes detectados: la aproximación con series puede ser muy inexacta.');
+end
+
 % Parámetros de la normal estándar
 mu = 0;
 sigma = 1;
-N = 20; % Número de términos de la serie para la aproximación
+N = 30; % Aumentamos términos para más precisión
 
 % Definir la constante de la normal
 C = 1 / sqrt(2*pi);
