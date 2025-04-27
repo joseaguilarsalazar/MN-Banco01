@@ -1,0 +1,6 @@
+fprintf('Ingrese el sistema angular que desea usar \n')
+sistema = input('Sexagesimal(1), centesimal(2), radian(3): ');
+
+angulo = input('Ingrese el valor del angulo: ');
+
+if 
