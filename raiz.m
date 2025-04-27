@@ -1,12 +1,22 @@
 n = input('Ingrese el número del cual desea calcular la raíz cuadrada: ');
-a = input('Primer valor del intervalo: ');
-b = input('Segundo valor del intervalo: ');
+
+% Definir automáticamente el intervalo
+if n >= 1
+    a = 0;
+    b = n;
+elseif n > 0 && n < 1
+    a = 0;
+    b = 1;
+else
+    error('Debe ingresar un número positivo.');
+end
+
 margen = 1e-8;
 
-% Definir la función automáticamente
+% Definir la función
 f = @(x) x.^2 - n;
 
-% Verificar que haya cambio de signo
+% Verificar que haya cambio de signo (en teoría siempre lo habrá con este intervalo)
 if f(a) * f(b) > 0
     error('La función no cambia de signo en el intervalo. No se puede aplicar bisección.');
 end
