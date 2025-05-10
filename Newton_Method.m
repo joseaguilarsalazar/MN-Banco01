@@ -4,7 +4,6 @@ x0 = input('Primer valor del intervalo: ');
 margen = 0.01;
 f = str2func(['@(x) ', F]);
 error = 1;
-g = @(x) x - f(x);
 
 % Derivada numérica de g(x)
 h = 1e-6;  % pequeño valor para la aproximación de la derivada
@@ -30,14 +29,6 @@ while error > margen
     if iter > max_iter
         error('Se alcanzó el número máximo de iteraciones sin converger.');
     end
-end
-
-% Evaluar la derivada numérica en la raíz aproximada
-valor_derivada = dg(x1);
-
-% Verificación de convergencia con |g'(x)| < 1
-if abs(valor_derivada) >= 1
-    warning('La derivada |g''(x)| >= 1 en la raíz aproximada. El método podría no haber convergido correctamente.');
 end
 
 fprintf('\nResultado:\n');
