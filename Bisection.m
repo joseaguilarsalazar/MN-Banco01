@@ -1,7 +1,7 @@
 clc; clear;
-Q = 4;
+Q = true;
 
-while Q == 4
+while Q
     fprintf('\n*** MÉTODO DE BISECCIÓN PARA TODAS LAS RAÍCES ***\n');
 
     % Entrada extremos del intervalo
@@ -10,7 +10,7 @@ while Q == 4
 
     % Entrada obligatoria: función y extremos del intervalo
     f = input('Ingrese la función f(x): ', 's');
-    f = inline(f);
+    f = str2func(['@(x) ', f]);
     
     % Parámetros fijos
     paso = 0.1;
@@ -38,8 +38,8 @@ while Q == 4
             raiz = (a + b)/2;
 
             % Verificar si la raíz ya fue registrada
-            if isempty(raices) || min(abs(raices - raiz)) > 1e-3
-                raices(end+1) = raiz;
+            if isempty(raices) || min(abs(raices - raiz)) > 1e-8
+                raices = [raices, raiz];
                 fprintf(' Raíz encontrada: %.6f\n', raiz);
             end
         end
@@ -54,6 +54,18 @@ while Q == 4
         disp(raices');
     end
 
-    Q = input('\n¿Desea realizar otro cálculo? (Presione 4 para repetir, otro número para salir): ');
-    clc;
+    while true
+        a = input('\n¿Desea realizar otro cálculo? (SI/NO): ', 's');
+        a = upper(strtrim(a)); % Convierte a mayúsculas y elimina espacios
+    
+        if strcmp(a, "SI")
+            Q = true;
+            break; % Sale del bucle con respuesta válida
+        elseif strcmp(a, "NO")
+            Q = false;
+            break;
+        else
+            fprintf("Valor no válido. Por favor, responda con SI o NO.\n");
+        end
+    end
 end
