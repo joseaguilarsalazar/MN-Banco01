@@ -3,7 +3,7 @@ while true
     sistema = input('Sexagesimal (1), Centesimal (2), Radian (3): ');
 
     if sistema == 1 || sistema == 2 || sistema == 3
-        break; % Salir del bucle si el sistema es válido
+        break;
     else
         fprintf('Opción inválida. Debe ser 1, 2 o 3.\n\n');
     end
@@ -13,39 +13,58 @@ angulo = input('Ingrese el valor del ángulo: ');
 
 switch sistema
     case 1
-        % Ya está en sexagesimal
-        angulo_sexagesimal = angulo;
+        angulo_radian = deg2rad(angulo);
     case 2
-        % De centesimal a sexagesimal
-        angulo_sexagesimal = angulo * (9/10);
+        angulo_radian = angulo * (pi / 200);
     case 3
-        % De radianes a sexagesimal
-        angulo_sexagesimal = angulo * (180/pi);
+        angulo_radian = angulo;
 end
 
 while true
     fprintf('Ingrese la función trigonométrica que desea realizar\n');
     fprintf('Opciones: seno, coseno, tangente, cosecante, secante, cotangente\n');
-    funcion = lower(input('', 's')); % Convertir a minúsculas para comparación fácil
+    funcion = lower(input('', 's'));
+
+    n_terminos = 100;  % Número de términos para la serie
 
     switch funcion
         case 'seno'
-            resultado = sin(deg2rad(angulo_sexagesimal));
+            resultado = taylor_sin(angulo_radian, n_terminos);
         case 'coseno'
-            resultado = cos(deg2rad(angulo_sexagesimal));
+            resultado = taylor_cos(angulo_radian, n_terminos);
         case 'tangente'
-            resultado = tan(deg2rad(angulo_sexagesimal));
+            sen = taylor_sin(angulo_radian, n_terminos);
+            cos = taylor_cos(angulo_radian, n_terminos);
+            resultado = sen / cos;
         case 'cosecante'
-            resultado = 1 / sin(deg2rad(angulo_sexagesimal));
+            sen = taylor_sin(angulo_radian, n_terminos);
+            resultado = 1 / sen;
         case 'secante'
-            resultado = 1 / cos(deg2rad(angulo_sexagesimal));
+            cos = taylor_cos(angulo_radian, n_terminos);
+            resultado = 1 / cos;
         case 'cotangente'
-            resultado = 1 / tan(deg2rad(angulo_sexagesimal));
+            sen = taylor_sin(angulo_radian, n_terminos);
+            cos = taylor_cos(angulo_radian, n_terminos);
+            resultado = cos / sen;
         otherwise
             fprintf('Función no reconocida. Intente de nuevo.\n\n');
-            continue; % Vuelve a pedir si no es una función válida
+            continue;
     end
 
-    fprintf('El resultado de %s(%.4f°) es: %.6f\n', funcion, angulo_sexagesimal, resultado);
-    break; % Salir del bucle si la función fue válida
+    fprintf('El resultado de %s del ángulo ingresado es: %.6f\n', funcion, resultado);
+    break;
+end
+
+function s = taylor_sin(x, n)
+    s = 0;
+    for i = 0:n
+        s = s + ((-1)^i * x^(2*i + 1)) / factorial(2*i + 1);
+    end
+end
+
+function c = taylor_cos(x, n)
+    c = 0;
+    for i = 0:n
+        c = c + ((-1)^i * x^(2*i)) / factorial(2*i);
+    end
 end
