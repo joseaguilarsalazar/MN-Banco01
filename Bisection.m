@@ -1,24 +1,59 @@
-F = input('Ingrese la ecuación: ', 's');
-a = input('Primer valor del intervalo: ');
-b = input('Segundo valor del intervalo: ');
-margen = 0.00000001;
+clc; clear;
+Q = 4;
 
-% Convertir string a función anónima
-f = str2func(['@(x) ', F]);
-while true
-    fprintf('[%.6f, %.6f]\n', a, b);
-    c = (a + b)/2;
-    if f(c) == 0 || abs(f(c)) < margen
-        fprintf('La raíz es: %.6f\n', c);
-        fprintf('El valor de f(c) es: %.6f\n', f(c));
-        break
+while Q == 4
+    fprintf('\n*** MÉTODO DE BISECCIÓN PARA TODAS LAS RAÍCES ***\n');
+
+    % Entrada extremos del intervalo
+    a_inicial = input('Ingrese el extremo izquierdo del intervalo: ');
+    b_inicial = input('Ingrese el extremo derecho del intervalo: ');
+
+    % Entrada obligatoria: función y extremos del intervalo
+    f = input('Ingrese la función f(x): ', 's');
+    f = inline(f);
+    
+    % Parámetros fijos
+    paso = 0.1;
+    tol = 1e-6;
+
+    raices = [];
+
+    % Recorrem el intervalo en pasos de 0.1
+    x = a_inicial;
+    while x < b_inicial
+        a = x;
+        b = x + paso;
+
+        if f(a)*f(b) < 0
+            iter = 0;
+            while abs(b - a) > tol && iter < 100
+                xm = (a + b)/2;
+                if f(a)*f(xm) < 0
+                    b = xm;
+                else
+                    a = xm;
+                end
+                iter = iter + 1;
+            end
+            raiz = (a + b)/2;
+
+            % Verificar si la raíz ya fue registrada
+            if isempty(raices) || min(abs(raices - raiz)) > 1e-3
+                raices(end+1) = raiz;
+                fprintf(' Raíz encontrada: %.6f\n', raiz);
+            end
+        end
+
+        x = x + paso;
     end
-    if sign(f(c)) == sign(f(a))
-        a = c;
+
+    if isempty(raices)
+        fprintf('No se encontraron raíces en el intervalo.\n');
     else
-        b = c;
+        fprintf('\n--- Todas las raíces encontradas ---\n');
+        disp(raices');
     end
-    if f(a) * f(b) > 0
-    error('La función no cambia de signo en el intervalo. No se puede aplicar bisección.');
-    end
+
+    Q = input('\n¿Desea realizar otro cálculo? (Presione 4 para repetir, otro número para salir): ');
+    clc;
 end
