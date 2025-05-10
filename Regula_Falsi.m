@@ -19,6 +19,6 @@ while true
         b = c;
     end
     if f(a) * f(b) > 0
-    error('La función no cambia de signo en el intervalo. No se puede aplicar bisección.');
+    error('La función no cambia de signo en el intervalo. No se puede aplicar el método de Regula Falsi.');
     end
 end
