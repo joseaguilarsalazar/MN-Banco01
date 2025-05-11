@@ -13,7 +13,7 @@ angulo = input('Ingrese el valor del ángulo: ');
 
 switch sistema
     case 1
-        angulo_radian = deg2rad(angulo);
+        angulo_radian = angulo * (pi / 180);
     case 2
         angulo_radian = angulo * (pi / 200);
     case 3
