@@ -4,21 +4,19 @@ Q = 4;
 while Q == 4
     fprintf('\n*** MÉTODO DE BISECCIÓN PARA TODAS LAS RAÍCES ***\n');
 
-    % Entrada extremos del intervalo
+    % Entrada de función y extremos del intervalo
+    f = input('Ingrese la función f(x): ', 's');
+    f = inline(f);
     a_inicial = input('Ingrese el extremo izquierdo del intervalo: ');
     b_inicial = input('Ingrese el extremo derecho del intervalo: ');
 
-    % Entrada obligatoria: función y extremos del intervalo
-    f = input('Ingrese la función f(x): ', 's');
-    f = inline(f);
-    
     % Parámetros fijos
     paso = 0.1;
     tol = 1e-6;
 
     raices = [];
 
-    % Recorrem el intervalo en pasos de 0.1
+    % Recorrer intervalo
     x = a_inicial;
     while x < b_inicial
         a = x;
