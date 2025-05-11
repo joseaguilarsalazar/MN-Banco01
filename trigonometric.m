@@ -26,26 +26,49 @@ while true
     funcion = lower(input('', 's'));
 
     n_terminos = 100;  % Número de términos para la serie
+    epsilon = 1e-10;   % Umbral para considerar cero
 
     switch funcion
         case 'seno'
             resultado = taylor_sin(angulo_radian, n_terminos);
+
         case 'coseno'
             resultado = taylor_cos(angulo_radian, n_terminos);
+
         case 'tangente'
             sen = taylor_sin(angulo_radian, n_terminos);
             cos = taylor_cos(angulo_radian, n_terminos);
+            if abs(cos) < epsilon
+                fprintf('Error: El coseno es aproximadamente cero. Tangente indefinida.\n\n');
+                continue;
+            end
             resultado = sen / cos;
+
         case 'cosecante'
             sen = taylor_sin(angulo_radian, n_terminos);
+            if abs(sen) < epsilon
+                fprintf('Error: El seno es aproximadamente cero. Cosecante indefinida.\n\n');
+                continue;
+            end
             resultado = 1 / sen;
+
         case 'secante'
             cos = taylor_cos(angulo_radian, n_terminos);
+            if abs(cos) < epsilon
+                fprintf('Error: El coseno es aproximadamente cero. Secante indefinida.\n\n');
+                continue;
+            end
             resultado = 1 / cos;
+
         case 'cotangente'
             sen = taylor_sin(angulo_radian, n_terminos);
+            if abs(sen) < epsilon
+                fprintf('Error: El seno es aproximadamente cero. Cotangente indefinida.\n\n');
+                continue;
+            end
             cos = taylor_cos(angulo_radian, n_terminos);
             resultado = cos / sen;
+
         otherwise
             fprintf('Función no reconocida. Intente de nuevo.\n\n');
             continue;
