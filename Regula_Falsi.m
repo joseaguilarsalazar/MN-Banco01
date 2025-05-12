@@ -3,50 +3,49 @@ f = inline(f_input);
 a_inicial = input('Ingrese el extremo izquierdo del intervalo: ');
 b_inicial = input('Ingrese el extremo derecho del intervalo: ');
 
-% Parámetros fijos
+% Parámetros
 paso = 0.1;
 tol = 1e-6;
 max_iter = 1000;
 raices = [];
 
-% Barrido del intervalo
+% Recorrido por subintervalos
 x = a_inicial;
 while x < b_inicial
-a = x;
-b = x + paso;
+    a = x;
+    b = x + paso;
 
-    if f(a)*f(b) < 0
+    if f(a) * f(b) < 0
         iter = 0;
-        while iter < max_iter
+        while abs(b - a) > tol && iter < max_iter
             fa = f(a);
             fb = f(b);
+            % ← Aquí cambia solo esta línea según el método
             c = b - fb * (a - b) / (fa - fb);
+
             fc = f(c);
-            if abs(c) < tol
-                break;
-            end
             if fa * fc < 0
                 b = c;
             else
                 a = c;
             end
+
             iter = iter + 1;
         end
 
-            raiz = c;
+        raiz = c;
 
-            % Verificar si la raíz ya fue registrada (evita repetidas)
-            if isempty(raices) || min(abs(raices - raiz)) > 1e-3
-                raices(end+1) = raiz;
-            end
+        if isempty(raices) || min(abs(raices - raiz)) > 1e-3
+            raices(end+1) = raiz;
         end
-
-        x = x + paso;
-end
-    % Mostrar todas las raíces
-    if isempty(raices)
-        fprintf('No se encontraron raíces en el intervalo.\n');
-    else
-        fprintf('\n--- Todas las raíces encontradas ---\n');
-        disp(raices');
     end
+
+    x = x + paso;
+end
+
+if isempty(raices)
+    fprintf('No se encontraron raíces.\n');
+else
+    fprintf('--- Raíces encontradas ---\n');
+    disp(raices');
+end
