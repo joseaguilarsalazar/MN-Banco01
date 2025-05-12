@@ -1,57 +1,41 @@
-clc; clear;
-Q = 4;
+f=input('Ingrese f(x):\n','s');
+f=inline(f);
+ai=input('Ingresa izquierda:\n');
+bi=input('Ingresa derecha:\n');
 
-while Q == 4
-    fprintf('\n*** MÉTODO DE BISECCIÓN PARA TODAS LAS RAÍCES ***\n');
+paso=0.1;
+tol=1e-8;
 
-    % Entrada de función y extremos del intervalo
-    f = input('Ingrese la función f(x): ', 's');
-    f = inline(f);
-    a_inicial = input('Ingrese el extremo izquierdo del intervalo: ');
-    b_inicial = input('Ingrese el extremo derecho del intervalo: ');
+raices=[];
 
-    % Parámetros fijos
-    paso = 0.1;
-    tol = 1e-6;
+x=ai;
+while x<bi
+    a=x;
+    b=x+paso;
 
-    raices = [];
-
-    % Recorrer intervalo
-    x = a_inicial;
-    while x < b_inicial
-        a = x;
-        b = x + paso;
-
-        if f(a)*f(b) < 0
-            iter = 0;
-            while abs(b - a) > tol && iter < 100
-                xm = (a + b)/2;
-                if f(a)*f(xm) < 0
-                    b = xm;
-                else
-                    a = xm;
-                end
-                iter = iter + 1;
+    if f(a)*f(b)<0
+    iter=0;
+        while abs(b-a)>tol && iter<1000
+        c=(a+b)/2;
+            if f(a)*f(c)>0
+            a=c;
+            else
+            b=c;
             end
-            raiz = (a + b)/2;
-
-            % Verificar si la raíz ya fue registrada
-            if isempty(raices) || min(abs(raices - raiz)) > 1e-3
-                raices(end+1) = raiz;
-                fprintf(' Raíz encontrada: %.6f\n', raiz);
-            end
+        iter=iter+1;
         end
+        raiz=(a+b)/2;
 
-        x = x + paso;
+        if isempty(raices)||min(abs(raices-raiz))>1e-8
+            raices(end+1)=raiz;
+        end
     end
+        x=x+paso;
+end
 
     if isempty(raices)
-        fprintf('No se encontraron raíces en el intervalo.\n');
+        fprintf('ERROR: Raices no encontradas.')
     else
-        fprintf('\n--- Todas las raíces encontradas ---\n');
-        disp(raices');
+        fprintf('\nTodas las raices encontradas:\n')
+        disp(raices);
     end
-
-    Q = input('\n¿Desea realizar otro cálculo? (Presione 4 para repetir, otro número para salir): ');
-    clc;
-end
