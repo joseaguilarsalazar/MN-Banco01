@@ -20,7 +20,6 @@ while x < b_inicial
         while abs(b - a) > tol && iter < max_iter
             fa = f(a);
             fb = f(b);
-            % ← Aquí cambia solo esta línea según el método
             c = b - fb * (a - b) / (fa - fb);
 
             fc = f(c);
