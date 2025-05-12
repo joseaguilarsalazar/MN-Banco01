@@ -3,9 +3,11 @@ clc; clear;
 % Entrada del número
 n = input('Ingrese el número del cual desea calcular la raíz cuadrada: ');
 
-% Verificación de número positivo
-if n <= 0
-    error('Debe ingresar un número positivo mayor que cero.');
+% Si es negativo, trabajamos con su valor absoluto
+negativo = false;
+if n < 0
+    negativo = true;
+    n = abs(n);
 end
 
 % Definir intervalo [a, b]
@@ -20,7 +22,7 @@ end
 % Precisión
 margen = 1e-8;
 
-% Definir función f(x)
+% Función f(x) = x^2 - n
 f = @(x) x.^2 - n;
 
 % Método de bisección
@@ -28,7 +30,12 @@ while true
     c = (a + b) / 2;
 
     if abs(f(c)) < margen
-        fprintf('Su raiz aproximada es: %.8f\n', c);  % Solo imprime la raíz
+        % Si el número original era negativo, la raíz es imaginaria
+        if negativo
+            fprintf('La raiz imaginaria aproximada es: %.8f*i\n', c);
+        else
+            fprintf('La raiz aproximada es: %.8f\n', c);
+        end
         break
     end
 
