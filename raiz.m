@@ -3,7 +3,7 @@ clc; clear;
 % Entrada del número
 n = input('Ingrese el número del cual desea calcular la raíz cuadrada: ');
 
-% Si es negativo, trabajamos con su valor absoluto
+% Si es negativo se trabaja con su valor absoluto
 negativo = false;
 if n < 0
     negativo = true;
@@ -30,7 +30,7 @@ while true
     c = (a + b) / 2;
 
     if abs(f(c)) < margen
-        % Si el número original era negativo, la raíz es imaginaria
+        % Si el número original era negativo, la raíz es imaginaria *i
         if negativo
             fprintf('La raiz imaginaria aproximada es: %.8f*i\n', c);
         else
