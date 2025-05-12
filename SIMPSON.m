@@ -24,10 +24,7 @@ x = a:h:b;
 y = f(x);
 
 % Aplicar la fórmula de Simpson compuesto
-integral = (h/3) * ( y(1) + ...
-                     4 * sum(y(2:2:end-1)) + ...
-                     2 * sum(y(3:2:end-2)) + ...
-                     y(end) );
+integral = (h/3) * ( y(1) +  4 * sum(y(2:2:end-1)) + 2 * sum(y(3:2:end-2)) + y(end) );
 
 % Mostrar el resultado
 fprintf('\nEl valor aproximado de la integral definida (Simpson) es: %.6f\n', integral);

@@ -7,19 +7,19 @@ a = input('Ingrese el límite inferior de integración (a): ');
 b = input('Ingrese el límite superior de integración (b): ');
 
 % Solicitar el número de subintervalos
-n = input('Ingrese el número de subintervalos (n): ');
+n = 10000;
 
 % Verificar que n sea un entero positivo
-if n <= 0 || mod(n,1) ~= 0
-    error('El número de subintervalos debe ser un entero positivo.');
-end
+%if n <= 0 || mod(n,1) ~= 0
+%    error('El número de subintervalos debe ser un entero positivo.');
+%end
 
 % Calcular el tamaño del paso
 h = (b - a) / n;
 
 % Generar los puntos de evaluación
 x = a:h:b;
-
+% 1,2,3,4
 % Evaluar la función en los puntos x
 y = f(x);
 
