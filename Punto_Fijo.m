@@ -1,44 +1,41 @@
-F = input('Ingrese la ecuación: ', 's');
-x0 = input('Primer valor del intervalo: ');
+f= input('Ingrese la función f(x): ', 's');
+f = inline(f);
 
-margen = 0.01;
-f = str2func(['@(x) ', F]);
-error = 1;
-g = @(x) x - f(x);
+a = input('Ingrese el extremo izquierdo del intervalo: ');
+b = input('Ingrese el extremo derecho del intervalo: ');
 
-% Derivada numérica de g(x)
-h = 1e-6;  % pequeño valor para la aproximación de la derivada
-dg = @(x) (g(x + h) - g(x)) / h;  % diferencia finita
+% Paso 2: Parámetros
+lambda = 0.1;              % Escala de corrección
+g = @(x) x - lambda*f(x);  % Definición de g(x)
+paso = 0.1;                % Paso para barrido
+tol = 1e-6;                % Tolerancia
+max_iter = 1000;           % Límite de iteraciones
 
-% Iteración del punto fijo
-max_iter = 1000;  % límite para evitar bucles infinitos
-iter = 0;
+raices = [];               % Vector para almacenar raíces encontradas
 
-while error > margen
+% Paso 3: Barrido del intervalo
+x = a;
+while x <= b
+    x0 = x;
+    iter = 0;
+    
     x1 = g(x0);
-
-    % Condición de parada si x1 es Inf o NaN
-    if isinf(x1) || isnan(x1)
-        error('El método diverge: el valor de x1 se vuelve infinito o indefinido.');
+    while abs(x1 - x0) > tol && iter < max_iter
+        x0 = x1;
+        x1 = g(x0);
+        iter = iter + 1;
     end
-
-    error = abs(x1 - x0);
-    fprintf('%.6f\t %.6f\t %.6f\n', x0, x1, error);
-    x0 = x1;
-    iter = iter + 1;
-
-    if iter > max_iter
-        error('Se alcanzó el número máximo de iteraciones sin converger.');
+    
+    % Verificar si la raíz hallada es válida y no repetida
+    if abs(f(x1)) < tol
+        if isempty(raices) || min(abs(raices - x1)) > 1e-3
+            raices(end+1) = x1;
+        end
     end
+    
+    x = x + paso;
 end
 
-% Evaluar la derivada numérica en la raíz aproximada
-valor_derivada = dg(x1);
-
-% Verificación de convergencia con |g'(x)| < 1
-if abs(valor_derivada) >= 1
-    warning('La derivada |g''(x)| >= 1 en la raíz aproximada. El método podría no haber convergido correctamente.');
-end
-
-fprintf('\nResultado:\n');
-fprintf('La raíz aproximada es: %.6f\n', x1);
+% Mostrar todas las raíces encontradas
+fprintf('\n--- Todas las raíces encontradas ---\n');
+disp(unique(round(raices, 6)));
