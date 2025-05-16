@@ -1,49 +1,53 @@
-margen = 0.00001;
+% Ingresar la función
+f = inline(input('Ingrese la función f(x): ', 's'));
 
-while true
-    fprintf('Metodo Busca \n');
-    F = input('Ingrese la ecuación: ', 's');
-    try
-    f = str2func(['@(x) ', F]);
-    catch
-        fprintf('ERROR al interpretar la función. Asegúrate de escribirla correctamente, como por ejemplo: x.^2 - 4\n');
-        continue
-    end
-    eI = input('Ingrese el exrtremo Izquierdo: \n');
-    eD = input('Ingrese el exrtremo Derecho: \n');
+% Ingreso del intervalo
+a = input('Inicio del intervalo: ');
+b = input('Fin del intervalo: ');
 
-    if eI > eD
-        a = eI;
-        ei = eD;
-        ed = a;
-    else
-        if eI == eD
-           fprintf('ERROR: los extremos deben ser diferentes\n');
-           continue
-        end
-    end
-    incremento = input('Ingrese el incremento: \n');
+% Parámetros
+paso = 0.1;
+tol = 1e-6;
+max_iter = 20;
+raices = [];
 
-    if incremento == 0
-        incremento = 1;
-    end
-    while true
-        if sign(f(eI)) == sign(f(eI + incremento))
-           eI = eI + incremento;
-        else
-            eD = eI + incremento;
-            incremento = incremento/100;
+% Barrido del intervalo
+x = a;
+while x < b
+    x1 = x;
+    x2 = x + paso;
+
+    y1 = f(x1);
+    y2 = f(x2);
+
+    % Cambio de signo = posible raíz en [x1, x2]
+    if isreal(y1) && isreal(y2) && y1 * y2 < 0
+        % Aplicar bisección para refinar
+        a1 = x1;
+        b1 = x2;
+        iter = 0;
+        
+        while abs(b1 - a1) > tol && iter < max_iter
+            c = (a1 + b1) / 2;
+            if f(a1) * f(c) < 0
+                b1 = c;
+            else
+                a1 = c;
+            end
+            iter = iter + 1;
         end
         
-        if eI == eD
-            fprintf('No hay solucion :(');
-            break
-        end
-    
-        if abs(f(eI)) < margen
-            fprintf('La raiz es: %.6f \n', eI);
-            fprintf('El resultado es %6f.: \n', f(eI));
-            break
+        raiz = (a1 + b1) / 2;
+        
+        % Verificar duplicados
+        if isempty(raices) || min(abs(raices - raiz)) > 1e-3
+            raices(end+1) = raiz;
         end
     end
+
+    x = x + paso;
 end
+
+% Mostrar resultados
+disp('Raíces encontradas:');
+disp(raices);

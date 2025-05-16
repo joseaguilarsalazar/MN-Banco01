@@ -1,6 +1,3 @@
-clc; clear;
-
-% Entrada del número
 n = input('Ingrese el número del cual desea calcular la raíz cuadrada: ');
 
 % Caso especial: raíz de cero
@@ -50,3 +47,5 @@ while true
         b = c;
     end
 end
+
+

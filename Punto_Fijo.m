@@ -1,41 +1,52 @@
-f= input('Ingrese la función f(x): ', 's');
-f = inline(f);
+f = inline(input('Ingrese la función f(x): ', 's'));
 
-a = input('Ingrese el extremo izquierdo del intervalo: ');
-b = input('Ingrese el extremo derecho del intervalo: ');
+% Cuántas funciones g(x) usarás
+n = input('¿Cuántas funciones g(x) deseas probar?: ');
+g = cell(1, n);
 
-% Paso 2: Parámetros
-lambda = 0.1;              % Escala de corrección
-g = @(x) x - lambda*f(x);  % Definición de g(x)
-paso = 0.1;                % Paso para barrido
-tol = 1e-6;                % Tolerancia
-max_iter = 1000;           % Límite de iteraciones
-
-raices = [];               % Vector para almacenar raíces encontradas
-
-% Paso 3: Barrido del intervalo
-x = a;
-while x <= b
-    x0 = x;
-    iter = 0;
-    
-    x1 = g(x0);
-    while abs(x1 - x0) > tol && iter < max_iter
-        x0 = x1;
-        x1 = g(x0);
-        iter = iter + 1;
-    end
-    
-    % Verificar si la raíz hallada es válida y no repetida
-    if abs(f(x1)) < tol
-        if isempty(raices) || min(abs(raices - x1)) > 1e-3
-            raices(end+1) = x1;
-        end
-    end
-    
-    x = x + paso;
+% Ingreso de cada g(x)
+for i = 1:n
+    g{i} = inline(input('g(x): ', 's'));
 end
 
-% Mostrar todas las raíces encontradas
-fprintf('\n--- Todas las raíces encontradas ---\n');
-disp(unique(round(raices, 6)));
+% Intervalo de análisis
+a = input('Inicio del intervalo: ');
+b = input('Fin del intervalo: ');
+
+% Parámetros
+paso = 0.1;
+tol = 1e-6;
+max_iter = 100;
+raices = [];
+
+% Aplicar punto fijo con cada g(x)
+for i = 1:n
+    gx = g{i};
+    x = a;
+
+    while x < b
+        x0 = x;
+
+        % Iteración de punto fijo
+        for k = 1:max_iter
+            x1 = gx(x0);
+            if abs(x1 - x0) < tol
+                break;
+            end
+            x0 = x1;
+        end
+
+        % Verificar que x1 sea real, válido y raíz de f(x)
+        if isreal(x1) && ~isinf(x1) && abs(f(x1)) < 1e-4
+            if isempty(raices) || min(abs(raices - x1)) > 1e-3
+                raices(end+1) = x1;
+            end
+        end
+
+        x = x + paso;
+    end
+end
+
+% Mostrar las raíces reales encontradas
+disp('Raíces encontradas:');
+disp(raices);

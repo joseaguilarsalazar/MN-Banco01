@@ -1,48 +1,43 @@
-f_input = input('Ingrese la función f(x): ', 's');
-f = inline(f_input);
-a_inicial = input('Ingrese el extremo izquierdo del intervalo: ');
-b_inicial = input('Ingrese el extremo derecho del intervalo: ');
+f = input('Ingrese la función f(x): ', 's');
+f = inline(f);
+
+ai = input('Ingrese el extremo izquierdo del intervalo: ');
+bi = input('Ingrese el extremo derecho del intervalo: ');
 
 % Parámetros
-paso = 0.1;
-tol = 1e-6;
-max_iter = 1000;
+paso = 0.1;       % Tamaño del subintervalo
+tol = 1e-6;       % Tolerancia
+max_iter = 200;   % Límite de iteraciones
 raices = [];
 
-% Recorrido por subintervalos
-x = a_inicial;
-while x < b_inicial
+x = ai;
+while x < bi
     a = x;
     b = x + paso;
-
+    
     if f(a) * f(b) < 0
         iter = 0;
         while abs(b - a) > tol && iter < max_iter
-            c = (a + b) / 2;
-
-            fc = f(c);
-            if f(a) * fc < 0
+            c = (a + b)/2;
+            if f(a) * f(c) < 0
                 b = c;
             else
                 a = c;
             end
-
             iter = iter + 1;
         end
-
-        raiz = (a + b) / 2;
-
+        
+        raiz = (a + b)/2;
+        
+        % Verificar si ya fue registrada
         if isempty(raices) || min(abs(raices - raiz)) > 1e-3
             raices(end+1) = raiz;
         end
     end
-
+    
     x = x + paso;
 end
 
-if isempty(raices)
-    fprintf('No se encontraron raíces.\n');
-else
-    fprintf('--- Raíces encontradas ---\n');
-    disp(raices');
-end
+% Salida
+fprintf('Raíces encontradas:\n');
+disp(raices);
