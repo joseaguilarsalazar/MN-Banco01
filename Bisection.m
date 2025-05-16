@@ -29,6 +29,8 @@ while x < bi
         
         raiz = (a + b)/2;
         
+
+        
         % Verificar si ya fue registrada
         if isempty(raices) || min(abs(raices - raiz)) > 1e-3
             raices(end+1) = raiz;
