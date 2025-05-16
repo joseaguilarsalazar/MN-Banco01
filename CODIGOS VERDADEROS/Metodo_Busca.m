@@ -8,7 +8,7 @@ b = input('Fin del intervalo: ');
 % Parámetros
 paso = 0.1;
 tol = 1e-6;
-max_iter = 20;
+max_iter = 200;
 raices = [];
 
 % Barrido del intervalo
