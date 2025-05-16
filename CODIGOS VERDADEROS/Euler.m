@@ -2,6 +2,11 @@
 x1 = input('Ingrese el valor de x1: ');
 x2 = input('Ingrese el valor de x2: ');
 
+if x1 >= x2
+    fprintf('Error: x1 debe ser menor que x2.\n');
+    return;
+end
+
 % Número de términos de la serie (fijo)
 N = 20;
 
